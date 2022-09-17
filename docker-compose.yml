@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  main:
+    build: .
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "20022:22"
+    environment:
+      - EDITOR=vim
+    volumes:
+      - .data/home:/home
+    privileged: true
+    networks:
+        default:
+        internal:
+
+networks:
+    default:
+    internal:
+        internal: true
+
