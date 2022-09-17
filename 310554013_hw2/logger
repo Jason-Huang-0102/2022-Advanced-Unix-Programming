@@ -1,0 +1,28 @@
+#!/bin/bash
+
+SO_PATH="./logger.so"
+OUTPUT_FILE=/dev/fd/2 # stderr
+
+help () {
+    echo "Usage: ./logger [-o file] [-p sopath] [--] cmd [cmd args ...]"
+    exit 1
+}
+
+while getopts "o:p:" opt; do
+    case "$opt" in
+        o)
+           OUTPUT_FILE=$OPTARG
+           ;;
+        p)
+            SO_PATH=$OPTARG
+            ;;
+        ?)
+            help
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+cmd=$@
+
+LD_PRELOAD="${SO_PATH}" ${cmd} 500> "${OUTPUT_FILE}"
+
